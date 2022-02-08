@@ -56,4 +56,17 @@ public abstract class Person {
     public void setEmail(String email) {
         this.email = email;
     }
+
+    public Person(){
+
+    }
+
+    public Person(String lastName, String firstName, String major, String role, long phoneNumber, String email) {
+        this.lastName = lastName;
+        this.firstName = firstName;
+        this.major = major;
+        this.role = role;
+        this.phoneNumber = phoneNumber;
+        this.email = email;
+    }
 }

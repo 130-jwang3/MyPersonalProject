@@ -1,0 +1,10 @@
+[ {
+  "lastName" : "bb",
+  "firstName" : "aa",
+  "major" : "CMPT",
+  "role" : "Student",
+  "phoneNumber" : 604,
+  "email" : "jj",
+  "studentNumber" : 6666,
+  "numGrade" : 66
+} ]
