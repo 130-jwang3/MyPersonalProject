@@ -1,0 +1,9 @@
+[ {
+  "lastName" : "Zhou",
+  "firstName" : "Jerry",
+  "major" : "MATH",
+  "role" : "Instructor",
+  "phoneNumber" : 7878778,
+  "email" : "jwang@gmail.com",
+  "employeeID" : 60605
+} ]

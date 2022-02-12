@@ -3,6 +3,7 @@ package com.personal.project.util;
 import com.fasterxml.jackson.core.type.*;
 import com.fasterxml.jackson.databind.*;
 import com.personal.project.dto.*;
+import org.apache.logging.log4j.*;
 
 import java.io.*;
 import java.nio.file.*;
@@ -10,6 +11,7 @@ import java.util.*;
 
 public class FileUtil {
     private static ObjectMapper mapper = new ObjectMapper();
+    private static Logger logger=LogManager.getLogger(FileUtil.class);
 
     public static String readAllContent(String fileName) {
         String content = "";
@@ -21,7 +23,7 @@ public class FileUtil {
                 content = new String(Files.readAllBytes(Paths.get(fileName)));
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.fatal(e);
         }
         return content;
     }
@@ -41,7 +43,7 @@ public class FileUtil {
 
         } catch (IOException e) {
             System.out.println("An error occurred.");
-            e.printStackTrace();
+            logger.fatal(e);
         }
     }
 
@@ -70,7 +72,7 @@ public class FileUtil {
                 writer.close();
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.fatal(e);
         }
     }
 }

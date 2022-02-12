@@ -4,8 +4,12 @@ import com.fasterxml.jackson.databind.*;
 import com.personal.project.dao.*;
 import com.personal.project.dto.*;
 import com.personal.project.util.*;
+import org.slf4j.*;
+
 
 import java.util.*;
+
+
 import java.util.stream.*;
 
 public class InstructorFileDAOImpl implements InstructorDAO {
@@ -13,13 +17,16 @@ public class InstructorFileDAOImpl implements InstructorDAO {
     public static final String INSTRUCTOR_FILENAME = "instructor.txt";
     public static ObjectMapper mapper = new ObjectMapper();
 
+
     @Override
     public void addInstructor(Instructor instructor) throws Exception {
-        FileUtil.appendFile(mapper.writeValueAsString(instructor), INSTRUCTOR_FILENAME);
+        if(findById(instructor.getEmployeeID())==null){
+            FileUtil.appendFile(mapper.writeValueAsString(instructor), INSTRUCTOR_FILENAME);
+        }
     }
 
     @Override
-    public Instructor findById(Integer employeeId) throws Exception {
+    public Instructor findById(Long employeeId) throws Exception {
         List<Instructor> instructorList = findAll();
         if (instructorList != null && instructorList.size() > 0) {
             return instructorList.stream().filter(stu -> stu.getEmployeeID() == employeeId).findFirst().get();
@@ -52,7 +59,7 @@ public class InstructorFileDAOImpl implements InstructorDAO {
     }
 
     @Override
-    public void deleteById(Integer employeeId) throws Exception {
+    public void deleteById(Long employeeId) throws Exception {
         List<Instructor> instructorList = findAll();
         if (instructorList != null && instructorList.size() > 0) {
             instructorList = instructorList.stream().
@@ -66,7 +73,19 @@ public class InstructorFileDAOImpl implements InstructorDAO {
     }
 
     @Override
-    public Instructor update(Instructor instructor) {
-        return null;
+    public Instructor update(Instructor instructor) throws Exception{
+        List<Instructor> studentList = findAll();
+        if (studentList != null && studentList.size() > 0) {
+            for(int i=0;i<studentList.size();i++){
+                if(studentList.get(i).getEmployeeID()==instructor.getEmployeeID()){
+                    studentList.set(i,instructor);
+                }
+            }
+            FileUtil.overwriteFile(mapper.writerWithDefaultPrettyPrinter()
+                    .writeValueAsString(studentList),INSTRUCTOR_FILENAME);
+        } else {
+            return null;
+        }
+        return instructor;
     }
 }

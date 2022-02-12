@@ -1,6 +1,6 @@
 [ {
   "lastName" : "bb",
-  "firstName" : "aa",
+  "firstName" : "John",
   "major" : "CMPT",
   "role" : "Student",
   "phoneNumber" : 604,

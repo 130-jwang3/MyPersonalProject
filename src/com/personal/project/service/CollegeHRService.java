@@ -3,8 +3,10 @@ package com.personal.project.service;
 import com.personal.project.dao.*;
 import com.personal.project.dao.impl.*;
 import com.personal.project.dto.*;
+import org.apache.logging.log4j.*;
 
 import java.util.*;
+
 
 /*
  * 1. business logic combination
@@ -15,6 +17,7 @@ public class CollegeHRService {
 
     private static StudentDAO studentDao = new StudentFileDAOImpl();
     private static InstructorDAO instructorDAO = new InstructorFileDAOImpl();
+    private static Logger logger = LogManager.getLogger(CollegeHRService.class);
     //private static InstructorDAO instructorDao = new xxxx;
 
     public List<Person> findAllHeadsByName(String keyword) {
@@ -27,13 +30,31 @@ public class CollegeHRService {
                 result.addAll(instructorDAO.findByName(keyword));
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error(e);
             return null;
         }
         return result;
     }
 
-    public int deleteById(Integer id, String type) {
+    public Student findByStudentID(Long studentID) {
+        try {
+            return studentDao.findById(studentID);
+        } catch (Exception e) {
+            logger.error(e);
+        }
+        return null;
+    }
+
+    public Instructor findByEmployeeID(Long employeeID) {
+        try {
+            return instructorDAO.findById(employeeID);
+        } catch (Exception e) {
+            logger.error(e);
+        }
+        return null;
+    }
+
+    public int deleteById(Long id, String type) {
         int rtn = 0;
         try {
             if ("Student".equals(type)) {
@@ -50,7 +71,7 @@ public class CollegeHRService {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error(e);
             rtn = -1;
         }
         return rtn;
@@ -62,7 +83,7 @@ public class CollegeHRService {
         try {
             studentDao.addStudent(newStudent);
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error(e);
             rtn = -1;
         }
         return rtn;
@@ -78,5 +99,41 @@ public class CollegeHRService {
             rtn = -1;
         }
         return rtn;
+    }
+
+    public List<Student> findAllStudent() {
+        try {
+            return studentDao.findAll();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public List<Instructor> findAllInstructor() {
+        try {
+            return instructorDAO.findAll();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public void changeByStudentID(Student student){
+        try{
+            studentDao.update(student);
+        }catch (Exception e){
+            logger.error(e);
+        }
+
+    }
+
+    public void changeByEmployeeID(Instructor instructor){
+        try{
+            instructorDAO.update(instructor);
+        }catch (Exception e){
+            logger.error(e);
+        }
+
     }
 }
