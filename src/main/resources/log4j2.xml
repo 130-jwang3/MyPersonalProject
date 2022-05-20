@@ -1,4 +1,4 @@
-<Configuration status="DEBUG" monitorInterval="300">
+<Configuration status="WARN" monitorInterval="300">
     <properties>
         <property name="LOG_HOME">C:\Users\johnw\Documents\log</property>
         <property name="FILE_NAME">mylog</property>
@@ -20,10 +20,10 @@
     </Appenders>
 
     <Loggers>
-        <Logger name="mylog" level="info" additivity="true">
+        <Logger name="mylog" level="trace" additivity="true">
             <AppenderRef ref="MyFile" />
         </Logger>
-        <Root level="debug">
+        <Root level="error">
             <AppenderRef ref="Console" />
         </Root>
     </Loggers>

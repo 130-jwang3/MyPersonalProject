@@ -29,7 +29,7 @@ public class InstructorFileDAOImpl implements InstructorDAO {
     public Instructor findById(Long employeeId) throws Exception {
         List<Instructor> instructorList = findAll();
         if (instructorList != null && instructorList.size() > 0) {
-            return instructorList.stream().filter(stu -> stu.getEmployeeID() == employeeId).findFirst().get();
+            return instructorList.stream().filter(stu -> stu.getEmployeeID() == employeeId).findFirst().orElse(null);
         } else {
             return null;
         }

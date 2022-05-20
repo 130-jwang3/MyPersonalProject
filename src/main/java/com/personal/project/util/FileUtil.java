@@ -11,7 +11,7 @@ import java.util.*;
 
 public class FileUtil {
     private static ObjectMapper mapper = new ObjectMapper();
-    private static Logger logger=LogManager.getLogger(FileUtil.class);
+    private static Logger logger=LogManager.getLogger("mylog");
 
     public static String readAllContent(String fileName) {
         String content = "";
@@ -60,7 +60,7 @@ public class FileUtil {
                 FileWriter writer = new FileWriter(fileName);
                 writer.write(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(studentList));
                 writer.close();
-            } else {
+            } else if(fileName.equals("instructor.txt")){
                 List<Instructor> instructorList = new ArrayList<>();
                 if (!allContent.isEmpty()) {
                     instructorList = mapper.readValue(allContent, new TypeReference<List<Instructor>>() {
@@ -70,9 +70,21 @@ public class FileUtil {
                 FileWriter writer = new FileWriter(fileName);
                 writer.write(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(instructorList));
                 writer.close();
+            }else{
+
+                List<Course> courseList = new ArrayList<>();
+                if (!allContent.isEmpty()) {
+                    courseList = mapper.readValue(allContent, new TypeReference<List<Course>>() {
+                    });
+                }
+                courseList.add(mapper.readValue(content, Course.class));
+                FileWriter writer = new FileWriter(fileName);
+                writer.write(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(courseList));
+                writer.close();
             }
         } catch (Exception e) {
             logger.fatal(e);
         }
     }
+
 }

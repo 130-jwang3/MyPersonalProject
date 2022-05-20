@@ -1,11 +1,38 @@
 package com.personal.project.dto;
 
 public abstract class Person {
+    public enum Major{
+        COMPUTER_SCIENCE,
+        ENGINEER,
+        MATH,
+        PHYSICS,
+        APPLIED_SCIENCE,
+        ARTS
+    }
     private String lastName;
     private String firstName;
-    private String major;
     private String role;
-    private long phoneNumber;
+    private Major major;
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+
+    private String gender;
+    private String phoneNumber;
+
+    public Major getMajor() {
+        return major;
+    }
+
+    public void setMajor(Major major) {
+        this.major = major;
+    }
+
     private String email;
 
     //getters and setters for the above field
@@ -33,19 +60,11 @@ public abstract class Person {
         this.firstName = firstName;
     }
 
-    public String getMajor() {
-        return major;
-    }
-
-    public void setMajor(String major) {
-        this.major = major;
-    }
-
-    public long getPhoneNumber() {
+    public String getPhoneNumber() {
         return phoneNumber;
     }
 
-    public void setPhoneNumber(long phoneNumber) {
+    public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
 
@@ -61,12 +80,12 @@ public abstract class Person {
 
     }
 
-    public Person(String lastName, String firstName, String major, String role, long phoneNumber, String email) {
+    public Person(String lastName, String firstName, Major major, String role, String phoneNumber, String gender) {
         this.lastName = lastName;
         this.firstName = firstName;
         this.major = major;
         this.role = role;
         this.phoneNumber = phoneNumber;
-        this.email = email;
+        this.gender = gender;
     }
 }
