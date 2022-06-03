@@ -65,7 +65,7 @@ public class InstructorDisplay {
                     System.out.println("Please input valid Instructor ID:");
                     employeeID= scanner.nextLong();
                 }while(collegeHRService.findByEmployeeID(employeeID)==null);
-                int result=collegeHRService.deleteById(employeeID,"instructor");
+                int result=collegeHRService.deleteById(employeeID,"Instructor");
                 if(result==0){
                     System.out.println("delete successful");
                 }else {
@@ -93,17 +93,10 @@ public class InstructorDisplay {
             String firstName = scanner.next();
             System.out.println("Input last name:");
             String lastName = scanner.next();
-            do {
-                generateMajor();
-                System.out.println("Input major:");
-                inputMajor = scanner.next();
-                isMajor = collegeHRService.testInputMajor(inputMajor);
-            } while (isMajor == true);
-            Person.Major major = Person.Major.valueOf(inputMajor);
-            System.out.println("Input phone number:");
-            String phoneNumber = scanner.next();
             System.out.println("Input gender:");
             String gender = scanner.next();
+            System.out.println("Input phone number:");
+            String phoneNumber = scanner.next();
             System.out.println("Input employee ID:");
             long employeeID = scanner.nextLong();
             do {
@@ -113,7 +106,8 @@ public class InstructorDisplay {
                 isTitle = collegeHRService.testInputTitle(inputTitle);
             } while (isTitle == true);
             Instructor.Title title = Instructor.Title.valueOf(inputTitle);
-            collegeHRService.addInstructor(firstName, lastName, major, phoneNumber, gender, employeeID, title);
+            Instructor instructor=new Instructor(firstName,lastName,"Instructor",phoneNumber,gender,employeeID,title);
+            collegeHRService.addInstructor(instructor);
             logger.info("new instructor added to file");
         } catch (Exception e) {
             logger.warn(e);
@@ -156,38 +150,24 @@ public class InstructorDisplay {
         } else if (option == 3) {
             System.out.println("Enter the new phone number");
             instructor.setPhoneNumber(scanner.next());
-        } else if (option == 4) {
-            System.out.println("Enter the new email");
-            instructor.setEmail(scanner.next());
-        } else if (option == 5) {
-            boolean isMajor = true;
-            String inputMajor = "";
-            do {
-                generateMajor();
-                System.out.println("Input major:");
-                inputMajor = scanner.next();
-                isMajor = collegeHRService.testInputMajor(inputMajor);
-            } while (isMajor);
-            Person.Major major = Person.Major.valueOf(inputMajor);
-            instructor.setMajor(major);
-        } else if (option == 6) {
+        }  else if (option == 4) {
             boolean isTitle = true;
             String inputTitle = "";
             do {
                 generateTitle();
-                System.out.println("Input major:");
+                System.out.println("Input title:");
                 inputTitle = scanner.next();
                 isTitle = collegeHRService.testInputTitle(inputTitle);
             } while (isTitle);
             Instructor.Title title=Instructor.Title.valueOf(inputTitle);
             instructor.setTitle(title);
         }
-        collegeHRService.changeByEmployeeID(instructor);
+        collegeHRService.updateByEmployeeID(instructor);
     }
 
     private static int generateStat(int isInstructor) {
         int result = 0;
-        int min = 1, max = 5;
+        int min = 1, max = 3;
         AsciiTable at = new AsciiTable();
         at.addRule();
         at.addRow("Choose 1 to change");
@@ -198,14 +178,10 @@ public class InstructorDisplay {
         at.addRule();
         at.addRow("3.phone number");
         at.addRule();
-        at.addRow("4.email");
-        at.addRule();
-        at.addRow("5.major");
-        at.addRule();
         if (isInstructor == 1) {
-            at.addRow("6.title");
+            at.addRow("4.title");
             at.addRule();
-            max = 6;
+            max = 4;
         }
         do {
             System.out.println(at.render());
@@ -240,15 +216,13 @@ public class InstructorDisplay {
         try {
             AsciiTable at = new AsciiTable();
             at.addRule();
-            at.addRow("Name", "Role", "Major", "Employee ID", "phone", "email", "title");
+            at.addRow("Name", "Role",  "Employee ID", "phone", "title");
             instructorList.forEach(instructor -> {
                 at.addRule();
                 at.addRow(instructor.getFirstName() + " " + instructor.getLastName(),
                         instructor.getRole(),
-                        instructor.getMajor(),
                         instructor.getEmployeeID(),
                         instructor.getPhoneNumber(),
-                        instructor.getEmail(),
                         instructor.getTitle());
             });
             at.addRule();

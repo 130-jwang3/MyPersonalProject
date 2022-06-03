@@ -9,6 +9,8 @@ public interface StudentDAO {
 
     public Student findById(Long studentId) throws Exception;
 
+    public Student findByOid(Long studentOid) throws Exception;
+
     public List<Student> findAll() throws Exception;
 
     public List<Student> findByName(String name) throws Exception;

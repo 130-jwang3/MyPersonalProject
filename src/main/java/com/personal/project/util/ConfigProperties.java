@@ -7,8 +7,12 @@ public class ConfigProperties {
 
     public static String load(String key){
         Properties prop = new Properties();
-       // prop.load(Files.newInputStream(Path.of("resources/app.config")));
-        prop.getProperty(key);
-        return "";
+        try {
+            prop.load(Files.newInputStream(Path.of("src/main/resources/app.config")));
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return prop.getProperty(key);
+
     }
 }

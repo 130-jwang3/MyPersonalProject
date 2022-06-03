@@ -1,13 +1,11 @@
-package com.personal.project.dao.impl;
+package com.personal.project.dao.impl.file;
 
-import com.fasterxml.jackson.core.type.*;
 import com.fasterxml.jackson.databind.*;
 import com.personal.project.dao.*;
 import com.personal.project.dto.*;
 import com.personal.project.util.*;
 import org.apache.logging.log4j.*;
 import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.core.*;
 
 import java.util.*;
 import java.util.stream.*;
@@ -37,6 +35,11 @@ public class StudentFileDAOImpl implements StudentDAO {
         } else {
             return null;
         }
+    }
+
+    @Override
+    public Student findByOid(Long studentOid) throws Exception {
+        return null;
     }
 
     @Override
@@ -92,4 +95,5 @@ public class StudentFileDAOImpl implements StudentDAO {
         }
         return student;
     }
+
 }

@@ -1,4 +1,4 @@
-package com.personal.project.dao.impl;
+package com.personal.project.dao.impl.file;
 
 import com.fasterxml.jackson.databind.*;
 import com.personal.project.dto.*;
@@ -18,6 +18,11 @@ public class CourseFileDAOImpl implements CourseDAO{
         if(findById(course.getCourseID())==null&&findByName(course.getName())==null){
             FileUtil.appendFile(mapper.writeValueAsString(course), COURSE_FILENAME);
         }
+    }
+
+    @Override
+    public Long findOid(String courseId) throws Exception {
+        return null;
     }
 
     @Override
@@ -53,7 +58,7 @@ public class CourseFileDAOImpl implements CourseDAO{
     }
 
     @Override
-    public void deleteById(Long courseID) throws Exception {
+    public void deleteById(String courseID) throws Exception {
         List<Course> courseList = findAll();
         if (courseList != null && courseList.size() > 0) {
             courseList = courseList.stream().
@@ -64,6 +69,11 @@ public class CourseFileDAOImpl implements CourseDAO{
         } else {
             return;
         }
+    }
+
+    @Override
+    public void deleteStudentByName(String course, Long student_id) throws Exception {
+
     }
 
     @Override

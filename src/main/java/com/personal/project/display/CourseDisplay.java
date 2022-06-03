@@ -63,8 +63,8 @@ public class CourseDisplay {
 
     private static void takeAction(int actionId) {
         String courseName = "";
-        List<Course> courses = collegeHRService.findAllCourses();
-        List<String> courseNames = courses.stream().map(course->course.getName()).collect(Collectors.toList());
+        //List<Course> courses = collegeHRService.findAllCourses();
+        //List<String> courseNames = courses.stream().map(course->course.getName()).collect(Collectors.toList());
         MenuAction menuAction=MenuAction.findByID(actionId);
         switch (menuAction) {
             case ADD_COURSE:
@@ -74,35 +74,36 @@ public class CourseDisplay {
                 do {
                     System.out.println("Please input valid course name:");
                     courseName = scanner.next();
-                } while (!courseNames.contains(courseName));
+
+                } while (collegeHRService.findByCourseName(courseName)==null);
                 assignCourseInstructor(courseName);
                 break;
             case ASSIGN_TA:
                 do {
                     System.out.println("Please input valid course name:");
                     courseName = scanner.next();
-                } while (!courseNames.contains(courseName));
+                } while (collegeHRService.findByCourseName(courseName)==null);
                 addCourseTA(courseName);
                 break;
             case ENROLL_STUDENT:
                 do {
                     System.out.println("Please input valid course name:");
                     courseName = scanner.next();
-                } while (!courseNames.contains(courseName));
+                } while (collegeHRService.findByCourseName(courseName)==null);
                 addCourseStudent(courseName);
                 break;
             case VIEW_ALL_STUDENT:
                 do {
                     System.out.println("Please input valid course name:");
                     courseName = scanner.next();
-                } while (!courseNames.contains(courseName));
+                } while (collegeHRService.findByCourseName(courseName)==null);
                 generateStudentList(collegeHRService.findByCourseName(courseName));
                 break;
             case DROP_COURSE:
                 do {
                     System.out.println("Please input valid course name:");
                     courseName = scanner.next();
-                } while (!courseNames.contains(courseName));
+                } while (collegeHRService.findByCourseName(courseName)==null);
                 dropCourse(collegeHRService.findByCourseName(courseName));
                 break;
             case VIEW_ALL_COURSES:
@@ -112,21 +113,21 @@ public class CourseDisplay {
                 do {
                     System.out.println("Please input valid course name:");
                     courseName = scanner.next();
-                } while (!courseNames.contains(courseName));
+                } while (collegeHRService.findByCourseName(courseName)==null);
                 assignGrade(collegeHRService.findByCourseName(courseName));
                 break;
             case CHANGE_FINAL_GRADE:
                 do {
                     System.out.println("Please input valid course name:");
                     courseName = scanner.next();
-                } while (!courseNames.contains(courseName));
+                } while (collegeHRService.findByCourseName(courseName)==null);
                 changeStudentGrade(collegeHRService.findByCourseName(courseName));
                 break;
             case VIEW_GRADE_DISTRIBUTION:
                 do {
                     System.out.println("Please input valid course name:");
                     courseName = scanner.next();
-                } while (!courseNames.contains(courseName));
+                } while (collegeHRService.findByCourseName(courseName)==null);
                 gradeDistribution(collegeHRService.findByCourseName(courseName));
                 break;
             case RETURN:
@@ -143,9 +144,21 @@ public class CourseDisplay {
             int capacity = scanner.nextInt();
             System.out.println("Input credit of class:");
             double credit = scanner.nextDouble();
+            long instructorID = 0;
+            List<Instructor> instructors = collegeHRService.findAllInstructor();
+            InstructorDisplay.generateInstructorList(instructors);
+            Instructor instructor = null;
+            do {
+                System.out.println("Assign Valid New Instructor(input employee ID):");
+                instructorID = scanner.nextLong();
+                final long confirmedInstructorID = instructorID;
+                instructor = instructors.stream().filter(ins->confirmedInstructorID==ins.getEmployeeID()).findFirst().orElse(null);
+            } while (instructor==null);
+            Course course=new Course(courseName,capacity,credit,instructor.getInstructor_oid());
             //Call Service
-            int rtn = courseService.addCourse(courseName, capacity, credit);
+            int rtn = collegeHRService.addCourse(course);
             //Output
+            System.out.println(rtn);
             if (rtn == 0)
                 logger.info("new course added to file");
             else {
@@ -168,8 +181,8 @@ public class CourseDisplay {
             instructorID = scanner.nextLong();
             final long confirmedInstructorID = instructorID;
             instructor = instructors.stream().filter(ins->confirmedInstructorID==ins.getEmployeeID()).findFirst().orElse(null);
-        } while (instructor!=null);
-        course.setAssignedInstructor(instructor.getTitle() + " " + instructor.getLastName());
+        } while (instructor==null);
+        course.setAssignedInstructor(instructor.getInstructor_oid());
         collegeHRService.updateCourse(course);
     }
 
@@ -194,15 +207,15 @@ public class CourseDisplay {
             TAID = scanner.nextLong();
         } while (collegeHRService.findByStudentID(TAID) == null ||
                 collegeHRService.findByStudentID(TAID).getType() == Student.Type.Undergraduate);
-        Set<Long> TAs = course.getTeacherAssists();
-        TAs.add(TAID);
-        course.setTeacherAssists(TAs);
-        collegeHRService.updateCourse(course);
+        Long student_oid=collegeHRService.findByStudentID(TAID).getStudentOID();
+        Long course_oid= course.getCourseOID();
+        CourseStudent courseStudent=new CourseStudent(student_oid,course_oid,Course.StudentCourseState.ENROLLED,-1.0,"TA");
+        collegeHRService.addTA(courseStudent);
     }
 
     private static void addCourseStudent(String courseName) {
         Course course = collegeHRService.findByCourseName(courseName);
-        Set<Course.CourseStudent> courseStudents = course.getStudentEnrolled();
+        List<CourseStudent> courseStudents = course.getStudentEnrolled();
         AsciiTable at = new AsciiTable();
         long studentID = 0;
         at.addRule();
@@ -221,18 +234,19 @@ public class CourseDisplay {
             System.out.println("Add new Student(input ID):");
             studentID = scanner.nextLong();
         } while (collegeHRService.findByStudentID(studentID) == null);
-        courseService.enrollStudent(studentID,courseName);
+        collegeHRService.enrollStudent(studentID,courseName);
     }
 
     private static void generateStudentList(Course course) {
         try {
-            Set<Course.CourseStudent> pair = course.getStudentEnrolled();
+            List<CourseStudent> pair = course.getStudentEnrolled();
+            List<CourseStudent> pairs=Stream.concat(pair.stream(),course.getFinishedStudent().stream()).collect(Collectors.toList());
             AsciiTable at = new AsciiTable();
             at.addRule();
             at.addRow("Student name", "Major", "Numerical grade", "Status in course");
             pair.forEach(courseStudent -> {
                 at.addRule();
-                Student student = collegeHRService.findByStudentID(courseStudent.getStudentId());
+                Student student = collegeHRService.findByStudentOID(courseStudent.getStudentOid());
                 at.addRow(student.getFirstName() + " " + student.getLastName(), student.getMajor(), courseStudent.getScore(), courseStudent.getState());
             });
             at.addRule();
@@ -249,21 +263,27 @@ public class CourseDisplay {
             System.out.println("Please input studentID:");
             studentID = scanner.nextLong();
         } while (collegeHRService.findByStudentID(studentID) == null || !collegeHRService.checkStudentExist(studentID, course));
-        Course.CourseStudent courseStudent = collegeHRService.findCourseStudentByID(studentID, course);
+        Student student= collegeHRService.findByStudentID(studentID);
+        CourseStudent courseStudent = collegeHRService.findCourseStudentByID(student.getStudentOID(), course);
+        courseStudent.setState(Course.StudentCourseState.DROPPED);
         if (courseStudent.getState() == Course.StudentCourseState.ENROLLED) {
-            Set<Course.CourseStudent> courseStudents = course.getStudentEnrolled();
+            List<CourseStudent> courseStudents = course.getStudentEnrolled();
             courseStudents.remove(courseStudent);
+            course.setStudentEnrolled(courseStudents);
+            if(course.getStudentEnrolled()==null){
+                System.out.println("1");
+            }
             if (!course.getWaitList().isEmpty()) {
-                Course.CourseStudent student = course.getWaitList().poll();
-                student.setState(Course.StudentCourseState.ENROLLED);
-                courseStudents.add(student);
+                CourseStudent courseStudent1 = course.getWaitList().poll();
+                courseStudent1.setState(Course.StudentCourseState.ENROLLED);
+                courseStudents.add(courseStudent1);
             }
         } else if (courseStudent.getState() == Course.StudentCourseState.WAITLISTED) {
             course.getWaitList().remove(courseStudent);
         } else {
             System.out.println("The student has finished or failed this course");
         }
-        collegeHRService.updateCourse(course);
+        collegeHRService.deleteCourseStudentByName(course.getName(), studentID);
     }
 
     private static void generateAllStudent(Course course) {
@@ -271,9 +291,9 @@ public class CourseDisplay {
         at.addRule();
         at.addRow("Student name", "student ID", "Student status");
         course.getStudentEnrolled().forEach(courseStudent -> {
-            Student student = collegeHRService.findByStudentID(courseStudent.getStudentId());
+            Student student = collegeHRService.findByStudentOID(courseStudent.getStudentOid());
             at.addRule();
-            at.addRow(student.getFirstName() + " " + student.getLastName(), courseStudent.getStudentId(), courseStudent.getState());
+            at.addRow(student.getFirstName() + " " + student.getLastName(), collegeHRService.findByStudentOID(student.getStudentOID()).getStudentNumber(), courseStudent.getState());
         });
         at.addRule();
         System.out.println(at.render());
@@ -307,10 +327,10 @@ public class CourseDisplay {
         } while (collegeHRService.findByStudentID(studentID) == null || collegeHRService.findCourseStudentByID(studentID, course).getState() != Course.StudentCourseState.ENROLLED);
         System.out.println("Please input student numerical grade:");
         double grade = scanner.nextDouble();
-        Course.CourseStudent student = collegeHRService.findCourseStudentByID(studentID, course);
+        CourseStudent student = collegeHRService.findCourseStudentByID(studentID, course);
         student.setScore(grade);
-        List<Course.CourseStudent> courseStudents = course.getFinishedStudent();
-        Set<Course.CourseStudent> studentSet = course.getStudentEnrolled();
+        List<CourseStudent> courseStudents = course.getFinishedStudent();
+        List<CourseStudent> studentSet = course.getStudentEnrolled();
         if (grade > 50) {
             student.setState(Course.StudentCourseState.FINISHED);
         } else {
@@ -320,7 +340,7 @@ public class CourseDisplay {
         course.setFinishedStudent(courseStudents);
         studentSet.remove(student);
         if (!course.getWaitList().isEmpty()) {
-            Course.CourseStudent courseStudent = course.getWaitList().poll();
+            CourseStudent courseStudent = course.getWaitList().poll();
             courseStudent.setState(Course.StudentCourseState.ENROLLED);
             studentSet.add(courseStudent);
         }
@@ -339,7 +359,7 @@ public class CourseDisplay {
                         collegeHRService.findCourseStudentByID(studentID, course).getState() != Course.StudentCourseState.FAILED));
         System.out.println("Please input student numerical grade:");
         double grade = scanner.nextDouble();
-        Course.CourseStudent courseStudent = collegeHRService.findCourseStudentByID(studentID, course);
+        CourseStudent courseStudent = collegeHRService.findCourseStudentByID(studentID, course);
         if (grade > 50) {
             courseStudent.setState(Course.StudentCourseState.FINISHED);
         } else {
@@ -354,25 +374,25 @@ public class CourseDisplay {
         at.addRule();
         at.addRow("Name", "Student ID", "Status", "Grade");
         course.getFinishedStudent().forEach(courseStudent -> {
-            Student student = collegeHRService.findByStudentID(courseStudent.getStudentId());
+            Student student = collegeHRService.findByStudentOID(courseStudent.getStudentOid());
             at.addRule();
-            at.addRow(student.getFirstName() + " " + student.getLastName(), courseStudent.getStudentId(), courseStudent.getState(), courseStudent.getScore());
+            at.addRow(student.getFirstName() + " " + student.getLastName(), collegeHRService.findByStudentOID(student.getStudentOID()).getStudentNumber(), courseStudent.getState(), courseStudent.getScore());
         });
         at.addRule();
         System.out.println(at.render());
     }
 
     private static void gradeDistribution(Course course) {
-        List<Course.CourseStudent> courseStudents = course.getFinishedStudent();
+        List<CourseStudent> courseStudents = course.getFinishedStudent();
         AsciiTable at = new AsciiTable();
         at.addRule();
-        at.addRow("Letter Grade", "Numer Grade", "GPA", "Student");
+        at.addRow("Letter Grade", "Numerical Grade", "GPA", "Student");
         Collections.sort(courseStudents, new Course.SortByGrade());
         at.addRule();
         at.addRow("F", "0-50", "0.0", "");
         courseStudents.forEach(courseStudent -> {
             if (courseStudent.getScore() <= 50) {
-                Student student = collegeHRService.findByStudentID(courseStudent.getStudentId());
+                Student student = collegeHRService.findByStudentOID(courseStudent.getStudentOid());
                 at.addRule();
                 at.addRow("F", courseStudent.getScore(), "0.0", student.getFirstName() + " " + student.getLastName());
             }
@@ -381,7 +401,7 @@ public class CourseDisplay {
         at.addRow("D", "51-60", "1.15", "");
         courseStudents.forEach(courseStudent -> {
             if (courseStudent.getScore() > 50 && courseStudent.getScore() <= 60) {
-                Student student = collegeHRService.findByStudentID(courseStudent.getStudentId());
+                Student student = collegeHRService.findByStudentOID(courseStudent.getStudentOid());
                 at.addRule();
                 at.addRow("D", courseStudent.getScore(), "1.15", student.getFirstName() + " " + student.getLastName());
             }
@@ -390,7 +410,7 @@ public class CourseDisplay {
         at.addRow("C", "61-70", "2", "");
         courseStudents.forEach(courseStudent -> {
             if (courseStudent.getScore() > 60 && courseStudent.getScore() <= 70) {
-                Student student = collegeHRService.findByStudentID(courseStudent.getStudentId());
+                Student student = collegeHRService.findByStudentOID(courseStudent.getStudentOid());
                 at.addRule();
                 at.addRow("D", courseStudent.getScore(), "2", student.getFirstName() + " " + student.getLastName());
             }
@@ -399,7 +419,7 @@ public class CourseDisplay {
         at.addRow("B", "71-80", "3", "");
         courseStudents.forEach(courseStudent -> {
             if (courseStudent.getScore() > 70 && courseStudent.getScore() <= 80) {
-                Student student = collegeHRService.findByStudentID(courseStudent.getStudentId());
+                Student student = collegeHRService.findByStudentOID(courseStudent.getStudentOid());
                 at.addRule();
                 at.addRow("B", courseStudent.getScore(), "3", student.getFirstName() + " " + student.getLastName());
             }
@@ -408,7 +428,7 @@ public class CourseDisplay {
         at.addRow("A", "81-100", "4", "");
         courseStudents.forEach(courseStudent -> {
             if (courseStudent.getScore() > 80 && courseStudent.getScore() <= 100) {
-                Student student = collegeHRService.findByStudentID(courseStudent.getStudentId());
+                Student student = collegeHRService.findByStudentOID(courseStudent.getStudentOid());
                 at.addRule();
                 at.addRow("A", courseStudent.getScore(), "4", student.getFirstName() + " " + student.getLastName());
             }

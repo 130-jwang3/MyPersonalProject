@@ -1,4 +1,4 @@
-package com.personal.project.dao.impl;
+package com.personal.project.dao.impl.file;
 
 import com.fasterxml.jackson.databind.*;
 import com.personal.project.dao.*;
@@ -23,6 +23,11 @@ public class InstructorFileDAOImpl implements InstructorDAO {
         if(findById(instructor.getEmployeeID())==null){
             FileUtil.appendFile(mapper.writeValueAsString(instructor), INSTRUCTOR_FILENAME);
         }
+    }
+
+    @Override
+    public Instructor findByOid(long employeeOid) throws Exception {
+        return null;
     }
 
     @Override
@@ -87,5 +92,10 @@ public class InstructorFileDAOImpl implements InstructorDAO {
             return null;
         }
         return instructor;
+    }
+
+    @Override
+    public Instructor findByCourseId(String courseId) throws Exception {
+        return null;
     }
 }

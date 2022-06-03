@@ -80,6 +80,14 @@ public abstract class Person {
 
     }
 
+    public Person(String lastName, String firstName, String role, String phoneNumber, String gender) {
+        this.lastName = lastName;
+        this.firstName = firstName;
+        this.role = role;
+        this.gender = gender;
+        this.phoneNumber = phoneNumber;
+    }
+
     public Person(String lastName, String firstName, Major major, String role, String phoneNumber, String gender) {
         this.lastName = lastName;
         this.firstName = firstName;

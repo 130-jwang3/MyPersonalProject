@@ -196,7 +196,7 @@ public class StudentDisplay {
                 Person.Major major = Person.Major.valueOf(inputMajor);
                 student.setMajor(major);
             }
-            collegeHRService.changeByStudentID(student);
+            collegeHRService.updateByStudentID(student);
         } catch (Exception e) {
             logger.warn(e);
         }
@@ -275,24 +275,25 @@ public class StudentDisplay {
     private static void leaveSchool(Long studentID){
         List<Course> courses=collegeHRService.findAllCourses();
         courses=courses.stream().filter(course -> collegeHRService.findCourseStudentByID(studentID,course)!=null).collect(Collectors.toList());
-        courses.forEach(course -> {Course.CourseStudent student=collegeHRService.findCourseStudentByID(studentID,course);
+        courses.forEach(course -> {
+            CourseStudent student=collegeHRService.findCourseStudentByID(studentID,course);
         if(student.getState()== Course.StudentCourseState.ENROLLED){
             student.setState(Course.StudentCourseState.FAILED);
             student.setScore(0.0);
             course.getFinishedStudent().add(student);
-            Set<Course.CourseStudent> courseStudents=course.getStudentEnrolled();
+            List<CourseStudent> courseStudents=course.getStudentEnrolled();
             courseStudents.remove(student);
             if(!course.getWaitList().isEmpty()){
-                Course.CourseStudent courseStudent=course.getWaitList().poll();
+                CourseStudent courseStudent=course.getWaitList().poll();
                 courseStudent.setState(Course.StudentCourseState.ENROLLED);
                 courseStudents.add(courseStudent);
-                Queue<Course.CourseStudent> studentQueue=course.getWaitList();
+                Queue<CourseStudent> studentQueue=course.getWaitList();
                 studentQueue.poll();
                 course.setWaitList(studentQueue);
             }
             course.setStudentEnrolled(courseStudents);
         }else if(student.getState()== Course.StudentCourseState.WAITLISTED){
-            Queue<Course.CourseStudent> courseStudents=course.getWaitList();
+            Queue<CourseStudent> courseStudents=course.getWaitList();
             courseStudents.remove(student);
             course.setWaitList(courseStudents);
         }

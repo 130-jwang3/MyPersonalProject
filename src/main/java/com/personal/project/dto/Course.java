@@ -6,57 +6,6 @@ import java.util.*;
 
 public class Course {
 
-    public static class CourseStudent {
-       private Long studentId;
-       private StudentCourseState state;
-       private Double score=0.0;
-
-        public Long getStudentId() {
-            return studentId;
-        }
-
-        public void setStudentId(Long studentId) {
-            this.studentId = studentId;
-        }
-
-        public StudentCourseState getState() {
-            return state;
-        }
-
-        public void setState(StudentCourseState state) {
-            this.state = state;
-        }
-
-        public Double getScore() {
-            return score;
-        }
-
-        public void setScore(Double score) {
-            this.score = score;
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-            CourseStudent that = (CourseStudent) o;
-            return Objects.equals(studentId, that.studentId);
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(studentId);
-        }
-
-        public CourseStudent() {
-        }
-
-        public CourseStudent(Long studentId, StudentCourseState state) {
-            this.studentId = studentId;
-            this.state = state;
-        }
-    }
-
     public static class SortByGrade implements Comparator<CourseStudent>{
         public int compare(CourseStudent a, CourseStudent b){
             return  Double.compare(a.getScore(),b.getScore());
@@ -72,13 +21,14 @@ public class Course {
     }
 
     private String name;
-    private String assignedInstructor;
+    private long assignedInstructor;
     //the key of the map is distinct by nature
-    private Set<CourseStudent> studentEnrolled = new HashSet<>();
-    private Set<Long> teacherAssists = new HashSet<Long>();
+    private List<CourseStudent> studentEnrolled = new ArrayList<>();
+    private List<Long> teacherAssists = new ArrayList<>();
     private Queue<CourseStudent> waitList=new PriorityQueue<>();
     private List<CourseStudent> finishedStudent=new ArrayList<>();
     private String courseID;
+    private long courseOID;
     private int capacity;
     private double credit;
 
@@ -90,6 +40,14 @@ public class Course {
         this.courseID = courseID;
     }
 
+    public Long getCourseOID() {
+        return courseOID;
+    }
+
+    public void setCourseOID(Long courseOID) {
+        this.courseOID = courseOID;
+    }
+
     public String getName() {
         return name;
     }
@@ -98,40 +56,40 @@ public class Course {
         this.name = name;
     }
 
-    public String getAssignedInstructor() {
+    public Long getAssignedInstructor() {
         return assignedInstructor;
     }
 
-    public void setAssignedInstructor(String assignedInstructor) {
+    public void setAssignedInstructor(Long assignedInstructor) {
         this.assignedInstructor = assignedInstructor;
     }
 
-    public Set<CourseStudent> getStudentEnrolled() {
+    public List<CourseStudent> getStudentEnrolled() {
         return studentEnrolled;
     }
 
-    public void setStudentEnrolled(Set<CourseStudent> studentEnrolled) {
+    public void setStudentEnrolled(List<CourseStudent> studentEnrolled) {
         this.studentEnrolled = studentEnrolled;
     }
 
-    public Set<Long> getTeacherAssists() {
+    public List<Long> getTeacherAssists() {
         return teacherAssists;
     }
 
-    public void setTeacherAssists(Set<Long> teacherAssists) {
+    public void setTeacherAssists(List<Long> teacherAssists) {
         this.teacherAssists = teacherAssists;
     }
     @JsonIgnore
     public int getTotalStudent() {
-        int size=(int)studentEnrolled.stream().filter(courseStudent -> courseStudent.getState()!=StudentCourseState.DROPPED).count();
+        int size=(int)studentEnrolled.stream().filter(courseStudent -> courseStudent.getState()==StudentCourseState.ENROLLED).count();
         return size;
     }
 
-    public int getCapacity() {
+    public Integer getCapacity() {
         return capacity;
     }
 
-    public void setCapacity(int capacity) {
+    public void setCapacity(Integer capacity) {
         this.capacity = capacity;
     }
 
@@ -143,11 +101,11 @@ public class Course {
         this.waitList = waitList;
     }
 
-    public double getCredit() {
+    public Double getCredit() {
         return credit;
     }
 
-    public void setCredit(double credit) {
+    public void setCredit(Double credit) {
         this.credit = credit;
     }
 
@@ -163,9 +121,9 @@ public class Course {
 
     }
 
-    public Course(String name, int capacity, double credit) {
+    public Course(String name, int capacity, double credit, Long instructor_oid) {
         this.name = name;
-        this.assignedInstructor="";
+        this.assignedInstructor=instructor_oid;
         this.courseID = UUID.randomUUID().toString();
         this.capacity=capacity;
         this.credit=credit;
