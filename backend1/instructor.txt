@@ -1,0 +1,19 @@
+[ {
+  "lastName" : "Will",
+  "firstName" : "Tim",
+  "role" : "Instructor",
+  "major" : "COMPUTER_SCIENCE",
+  "phoneNumber" : 6,
+  "email" : "j",
+  "employeeID" : 33445566,
+  "title" : "professor"
+}, {
+  "lastName" : "b",
+  "firstName" : "a",
+  "role" : "Instructor",
+  "major" : "ENGINEER",
+  "phoneNumber" : 0,
+  "email" : "k",
+  "employeeID" : 44556677,
+  "title" : "Associate_professor"
+} ]

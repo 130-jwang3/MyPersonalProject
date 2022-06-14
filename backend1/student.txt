@@ -1,0 +1,41 @@
+[ {
+  "lastName" : "Wang",
+  "firstName" : "John",
+  "role" : "Student",
+  "major" : "ENGINEER",
+  "phoneNumber" : 6043523313,
+  "email" : "johnwang0726@gmail.com",
+  "type" : "Undergraduate",
+  "studentNumber" : 301421744,
+  "numGrade" : 90
+}, {
+  "lastName" : "ZHou",
+  "firstName" : "Jerry",
+  "role" : "Student",
+  "major" : "MATH",
+  "phoneNumber" : 6046666655,
+  "email" : "jz@gmail.com",
+  "type" : "Graduate",
+  "studentNumber" : 301421733,
+  "numGrade" : 9
+}, {
+  "lastName" : "bb",
+  "firstName" : "aa",
+  "role" : "Student",
+  "major" : "CMPT",
+  "phoneNumber" : 778,
+  "email" : "j",
+  "type" : "Undergraduate",
+  "studentNumber" : 301421722,
+  "numGrade" : 0
+}, {
+  "lastName" : "jay",
+  "firstName" : "kay",
+  "role" : "Student",
+  "major" : "PHYSICS",
+  "phoneNumber" : 0,
+  "email" : "k",
+  "type" : "Graduate",
+  "studentNumber" : 301421711,
+  "numGrade" : 0
+} ]

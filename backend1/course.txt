@@ -1,0 +1,53 @@
+[ {
+  "name" : "CMPT307",
+  "assignedInstructor" : "Associate_professor b",
+  "studentEnrolled" : [ {
+    "studentId" : 301421711,
+    "state" : "ENROLLED",
+    "score" : 0.0
+  }, {
+    "studentId" : 301421722,
+    "state" : "ENROLLED",
+    "score" : 0.0
+  } ],
+  "teacherAssists" : [ ],
+  "waitList" : [ {
+    "studentId" : 301421733,
+    "state" : "WAITLISTED",
+    "score" : 0.0
+  }, {
+    "studentId" : 301421744,
+    "state" : "WAITLISTED",
+    "score" : 0.0
+  } ],
+  "finishedStudent" : [ ],
+  "courseID" : "7145eaa4-7ff3-4c48-bc0c-e4986be0157f",
+  "capacity" : 2,
+  "credit" : 3.0
+}, {
+  "name" : "CMPT295",
+  "assignedInstructor" : "professor Will",
+  "studentEnrolled" : [ {
+    "studentId" : 301421711,
+    "state" : "ENROLLED",
+    "score" : 0.0
+  } ],
+  "teacherAssists" : [ ],
+  "waitList" : [ {
+    "studentId" : 301421722,
+    "state" : "WAITLISTED",
+    "score" : 0.0
+  }, {
+    "studentId" : 301421733,
+    "state" : "WAITLISTED",
+    "score" : 0.0
+  }, {
+    "studentId" : 301421744,
+    "state" : "WAITLISTED",
+    "score" : 0.0
+  } ],
+  "finishedStudent" : [ ],
+  "courseID" : "acdcc8b1-e297-496c-8ca9-6ff5fb3e548c",
+  "capacity" : 1,
+  "credit" : 4.0
+} ]
