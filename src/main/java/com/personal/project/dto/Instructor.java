@@ -4,15 +4,12 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.util.*;
-@Entity
 public class Instructor extends Person {
     public enum Title{
         Assistant_professor,
         Associate_professor,
         professor
     }
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     private long instructor_oid;
     private long employeeID;
     private Title title;

@@ -10,6 +10,7 @@ import java.util.*;
 
 @RestController
 @RequestMapping("/api/student")
+@CrossOrigin(origins = "http://localhost:4200")
 public class StudentController {
 
     @Autowired
@@ -59,6 +60,16 @@ public class StudentController {
         }
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity getStudentByName(@PathVariable("id") Long oid) {
+
+        if (oid!=null&&studentService.findByStudentOID(oid)!=null) {
+            return ResponseEntity.ok(studentService.findByStudentOID(oid));
+        }else{
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
+
     @PutMapping
     public ResponseEntity updateStudent(@RequestBody Student student){
         if (student.getStudentOID()==null||studentService.findByStudentOID(student.getStudentOID())==null)
@@ -71,10 +82,19 @@ public class StudentController {
 
     @GetMapping("/{id}/grade")
     public ResponseEntity getStudentGradeById(@PathVariable("id") Long id) {
-        if (studentService.findByStudentID(id)==null)
+        if (studentService.findByStudentOID(id)==null)
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         else {
             return ResponseEntity.ok(studentService.getStudentCreditAndCGPA(id));
+        }
+    }
+
+    @GetMapping("/detail/{id}")
+    public ResponseEntity getDetail(@PathVariable("id") Long id){
+        if(studentService.findByStudentOID(id)==null||studentService.studentDetail(id)==null){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }else{
+            return ResponseEntity.ok(studentService.studentDetail(id));
         }
     }
 

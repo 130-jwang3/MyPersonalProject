@@ -5,6 +5,7 @@ import com.personal.project.dao.impl.mysql.*;
 import com.personal.project.dto.*;
 import org.apache.commons.lang3.tuple.*;
 import org.apache.logging.log4j.*;
+import org.checkerframework.checker.units.qual.*;
 import org.springframework.stereotype.*;
 
 import java.util.*;
@@ -99,13 +100,12 @@ public class CollegeHRService {
     public Map<String, Double> getStudentCreditAndCGPA(Long studentId) {
         List<Course> courses = findAllCourses();
         Map<String, Double> studentScoreMap = new HashMap<String, Double>();
-        Long oid=findByStudentID(studentId).getStudentOID();
-        courses = courses.stream().filter(course -> findCourseStudentByID(oid, course)!=null&&(findCourseStudentByID(oid, course).getState() == Course.StudentCourseState.FINISHED ||
-                findCourseStudentByID(oid, course).getState() == Course.StudentCourseState.FAILED)).collect(Collectors.toList());
+        courses = courses.stream().filter(course -> findCourseStudentByID(studentId, course)!=null&&(findCourseStudentByID(studentId, course).getState() == Course.StudentCourseState.FINISHED ||
+                findCourseStudentByID(studentId, course).getState() == Course.StudentCourseState.FAILED)).collect(Collectors.toList());
         int totalCredit = 0;
         List<Double> scores = new ArrayList<>();
         for (Course course : courses) {
-            scores.add(findCourseStudentByID(oid, course).getScore());
+            scores.add(findCourseStudentByID(studentId, course).getScore());
             totalCredit += course.getCredit();
         }
         studentScoreMap.put("credit", (double) totalCredit);
@@ -176,6 +176,29 @@ public class CollegeHRService {
 
     }
 
+    //current GPA, enrolled course, finished course
+    public List<CourseStudent> studentDetail(Long studentOID){
+        List<CourseStudent> courseNames=new ArrayList<>();
+        try{
+            Student student=findByStudentOID(studentOID);
+            List<Course> courses=findAllCourses();
+
+            for(Course course:courses){
+                CourseStudent courseStudent=findCourseStudentByID(student.getStudentOID(),course);
+                if(courseStudent!=null){
+                    courseStudent.setStudent(findByStudentOID(courseStudent.getStudentOid()));
+                    courseStudent.setCourse(findCourseName(courseStudent.getCourseOid()));
+                    courseNames.add(courseStudent);
+                }
+
+            }
+            return courseNames;
+        }catch (Exception e){
+            logger.error(e);
+        }
+        return courseNames;
+    }
+
     //instructor
     public int addInstructor(Instructor instructor) {
         int rtn = 0;
@@ -244,6 +267,20 @@ public class CollegeHRService {
         return rtn;
     }
 
+    public int deleteCourseById(Long course_oid){
+        int rtn=0;
+        try{
+            if(findCourseName(course_oid)!=null){
+                courseDAO.deleteById(course_oid);
+            }else{
+                rtn=-1;
+            }
+        }catch (Exception e){
+            logger.error(e);
+        }
+        return rtn;
+    }
+
     public int deleteCourseStudentByName(String name, Long student_id) {
         int rtn = 0;
         try {
@@ -274,6 +311,16 @@ public class CollegeHRService {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public Course findCourseName(Long courseOID){
+        Course course=new Course();
+        try{
+            course=courseDAO.findByOid(courseOID);
+        }catch (Exception e){
+            logger.error(e);
+        }
+        return course;
     }
 
     public void updateCourse(Course course) {
@@ -372,6 +419,7 @@ public class CollegeHRService {
         }
         updateCourseStudent(student);
     }
+
 
     //other
     public boolean testInputMajor(String major) {

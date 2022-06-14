@@ -11,6 +11,7 @@ import java.util.*;
 
 @RestController
 @RequestMapping("/api/course")
+@CrossOrigin(origins = "http://localhost:4200")
 public class CourseController {
     @Autowired
     CollegeHRService courseService;
@@ -26,11 +27,20 @@ public class CourseController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
 
-    @DeleteMapping
+    @DeleteMapping("/course-student")
     public ResponseEntity deleteCourseStudentById(@RequestParam("name") String name,@RequestParam("id") long id) {
         int rtn= courseService.deleteCourseStudentByName(name,id);
         if (rtn==0)
             return ResponseEntity.ok(courseService.findByCourseName(name));
+        else
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity deleteCourseById(@PathVariable("id") Long id) {
+        int rtn= courseService.deleteCourseById(id);
+        if (rtn==0)
+            return ResponseEntity.ok("successful deleted");
         else
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
@@ -46,15 +56,26 @@ public class CourseController {
 
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity getCourseByID(@PathVariable("id") Long id) {
+        Course course= courseService.findCourseName(id);
+        if (course!=null) {
+            return ResponseEntity.ok(course);
+        }else{
+            return null;
+        }
+
+    }
+
     @GetMapping("/all")
     public ResponseEntity getAllCourses(){
         List<Course> courses= courseService.findAllCourses();
         return ResponseEntity.ok(courses);
     }
 
-    @PutMapping
-    public ResponseEntity updateCourse(@RequestBody Course course){
-        if (course.getCourseOID()==null||courseService.findByCourseName(course.getName())==null)
+    @PutMapping("/{id}")
+    public ResponseEntity updateCourse(@PathVariable("id") Long id,@RequestBody Course course){
+        if (courseService.findCourseName(id)==null)
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         else {
             courseService.updateCourse(course);
@@ -62,8 +83,8 @@ public class CourseController {
         }
     }
 
-    @PostMapping("/course-student")
-    public ResponseEntity<CourseStudent> addCourseStudent(@RequestParam("name") String name,@RequestParam("id") Long id) {
+    @PostMapping("/course-student/{id}")
+    public ResponseEntity<CourseStudent> addCourseStudent(@PathVariable("id") Long id,@RequestParam("name") String name) {
         Long oid=courseService.findByStudentID(id).getStudentOID();
         String course_id=courseService.findByCourseName(name).getCourseID();
         int rtn = courseService.enrollStudent(oid,course_id);
@@ -107,8 +128,8 @@ public class CourseController {
         }
     }
 
-    @PutMapping("/course-student/{id}/{grade}")
-    public ResponseEntity updateGrade(@PathVariable("id")Long id,@PathVariable("grade") Double grade,@RequestBody Course course){
+    @PutMapping("/course-student/{id}")
+    public ResponseEntity updateGrade(@PathVariable("id")Long id,@RequestParam("grade") Double grade,@RequestBody Course course){
         Long oid=courseService.findByStudentID(id).getStudentOID();
         if (courseService.findCourseStudentByID(oid,course)==null||oid==null)
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();

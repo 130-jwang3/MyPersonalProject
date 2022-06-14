@@ -36,6 +36,11 @@ public class CourseFileDAOImpl implements CourseDAO{
     }
 
     @Override
+    public Course findByOid(Long courseOid) throws Exception {
+        return null;
+    }
+
+    @Override
     public List<Course> findAll() throws Exception {
         String content = FileUtil.readAllContent(COURSE_FILENAME);
         List<Course> courseList = new ArrayList<Course>();
@@ -58,7 +63,7 @@ public class CourseFileDAOImpl implements CourseDAO{
     }
 
     @Override
-    public void deleteById(String courseID) throws Exception {
+    public void deleteById(Long courseID) throws Exception {
         List<Course> courseList = findAll();
         if (courseList != null && courseList.size() > 0) {
             courseList = courseList.stream().
@@ -69,6 +74,11 @@ public class CourseFileDAOImpl implements CourseDAO{
         } else {
             return;
         }
+    }
+
+    @Override
+    public void deleteById(String courseID) throws Exception {
+
     }
 
     @Override

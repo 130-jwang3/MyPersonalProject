@@ -1,14 +1,44 @@
 package com.personal.project.dto;
 
+import javax.persistence.*;
+import javax.persistence.Entity;
 import java.util.*;
+import com.personal.project.service.*;
+import org.hibernate.annotations.*;
+
 
 public class CourseStudent {
+    private Long oid;
+
+    public Long getOid() {
+        return oid;
+    }
+
+    public void setOid(Long oid) {
+        this.oid = oid;
+    }
+
     private Long studentOid;
     private Long courseOid;
     private Course.StudentCourseState state;
     private Double score = 0.0;
-
     private String courseRole;
+    private Student student;
+    private Course course;
+    public Student getStudent() {
+        return student;
+    }
+
+    public void setStudent(Student student) {
+        this.student = student;
+    }
+    public Course getCourse() {
+        return course;
+    }
+
+    public void setCourse(Course course) {
+        this.course = course;
+    }
 
     public Long getStudentOid() {
         return studentOid;

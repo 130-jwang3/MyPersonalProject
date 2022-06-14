@@ -88,7 +88,7 @@ InstructorMysqlDAOImpl implements InstructorDAO {
     @Override
     public Instructor update(Instructor instructor) throws Exception {
         int count=SQLExecutor.runUpdate(InstructorSQLDef.INS_UPDATE,List.of(instructor.getLastName(),instructor.getFirstName()
-                ,instructor.getPhoneNumber()+"",instructor.getEmployeeID()+""));
+                ,instructor.getPhoneNumber()+"",instructor.getTitle()+"",instructor.getEmployeeID()+""));
         System.out.println(count + "row/s affected");
         Instructor instructor1 = findById(instructor.getEmployeeID());
         return instructor1;

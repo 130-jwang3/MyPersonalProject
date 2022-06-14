@@ -11,9 +11,13 @@ public interface CourseDAO  {
 
     Course findById(String courseId) throws Exception;
 
+    Course findByOid(Long courseOid) throws Exception;
+
     List<Course> findAll() throws Exception;
 
     Course findByName(String name) throws Exception;
+
+    public void deleteById(Long courseOid) throws Exception;
 
     void deleteById(String courseID) throws Exception;
 

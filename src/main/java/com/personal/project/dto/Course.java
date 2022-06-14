@@ -2,8 +2,8 @@ package com.personal.project.dto;
 
 import com.fasterxml.jackson.annotation.*;
 
+import javax.persistence.*;
 import java.util.*;
-
 public class Course {
 
     public static class SortByGrade implements Comparator<CourseStudent>{

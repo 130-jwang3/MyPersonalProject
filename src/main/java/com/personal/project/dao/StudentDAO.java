@@ -1,9 +1,10 @@
 package com.personal.project.dao;
 
 import com.personal.project.dto.*;
+import org.springframework.stereotype.*;
 
 import java.util.*;
-
+@Repository
 public interface StudentDAO {
     public void addStudent(Student student) throws Exception;
 

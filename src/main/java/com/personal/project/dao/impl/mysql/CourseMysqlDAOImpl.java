@@ -54,6 +54,19 @@ public class CourseMysqlDAOImpl implements CourseDAO {
     }
 
     @Override
+    public Course findByOid(Long courseOid) throws Exception {
+        return new SQLExecutor<Course>().runQuery(CourseSQLDef.FIND_COURSE_BY_OID, List.of(courseOid), (rs -> {
+            Course course=null;
+            while (rs.next()) {
+                course = getCourseFromResultSet(rs);
+                String courseId=course.getCourseID();
+                course=findById(courseId);
+            }
+            return course;
+        }));
+    }
+
+    @Override
     public List<Course> findAll() throws Exception {
         return new SQLExecutor<List<Course>>().runQuery(CourseSQLDef.FIND_ALL, null, (rs -> {
             List<Course> courses = new ArrayList<>();
@@ -64,6 +77,12 @@ public class CourseMysqlDAOImpl implements CourseDAO {
             }
             return courses;
         }));
+    }
+
+    @Override
+    public void deleteById(Long courseOid) throws Exception {
+        int count=SQLExecutor.runUpdate(CourseSQLDef.DELETE_BY_ID,List.of(courseOid));
+        System.out.println(count + "row/s affected");
     }
 
     @Override
@@ -95,7 +114,7 @@ public class CourseMysqlDAOImpl implements CourseDAO {
 
     @Override
     public Course update(Course course) throws Exception {
-        int count=SQLExecutor.runUpdate(CourseSQLDef.UPDATE_COURSE,List.of(course.getAssignedInstructor()));
+        int count=SQLExecutor.runUpdate(CourseSQLDef.UPDATE_COURSE,List.of(course.getAssignedInstructor(),course.getCourseOID()));
         System.out.println(count + "row/s affected");
         Course course1=findById(course.getCourseID());
         return course1;

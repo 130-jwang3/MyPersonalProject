@@ -78,7 +78,7 @@ public class StudentMysqlDAOImpl implements StudentDAO {
     @Override
     public Student update(Student student) throws Exception {
         int count = SQLExecutor.runUpdate(StudentSQLDef.STU_UPDATE, List.of(student.getLastName(), student.getFirstName()
-                , student.getPhoneNumber() + "", student.getMajor() + "", student.getStudentNumber() + ""));
+                , student.getPhoneNumber() + "", student.getMajor() + "",student.getType()+"", student.getStudentNumber() + ""));
         System.out.println(count + "row/s affected");
         Student student1 = findById(student.getStudentNumber());
         return student1;
