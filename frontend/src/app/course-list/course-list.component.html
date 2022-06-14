@@ -1,0 +1,40 @@
+<div class="list row">
+  <div class="col-md-8 container-fluid">
+    <div class="input-group mb-4 ">
+      <input type="text" class="form-control" placeholder="Search by name" [(ngModel)]="searchName"/>
+      <button class="btn btn-secondary container-fluid" type="button" (click)="searchByName(searchName)">
+        Search
+      </button>
+    </div>
+  </div>
+  <div class="panel-body container table-bordered table-striped">
+    <h4>Course List</h4>
+
+    <table class="table table-hover table-sm table-bordered">
+      <thead class="thread-light">
+      <tr>
+        <th scope="col">Course Name</th>
+        <th scope="col">Course ID</th>
+        <th scope="col">Assigned Instructor</th>
+        <th scope="col">Capacity</th>
+        <th scope="col">Credit</th>
+        <th scope="col" style="min-width: 150px;">Action</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let course of courses;">
+        <td>{{course.name}}</td>
+        <td>{{course.courseID}}</td>
+        <td>{{course.assignedInstructor}}</td>
+        <td>{{course.capacity}}</td>
+        <td>{{course.credit}}</td>
+        <td>
+          <button type="button" class="btn btn-warning mr-1" routerLink="/courses/{{course.courseOID}}">Edit</button>
+          <button type="button" class="btn btn-danger mr-1" (click)="deleteCourse(course.courseOID)">Delete</button>
+          <button type="button" class="btn btn-primary mr-1" routerLink="/coursedetail/{{course.courseOID}}">Detail</button>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

@@ -1,0 +1,71 @@
+<div class="container text-center table-bordered table-sm" style="width:300px;">
+  <div class="panel-title"><h2>Add Course Form</h2></div>
+  <div>
+    <form (ngSubmit)="onSubmit()" #userForm="ngForm">
+      <div class="form-group">
+        <label for="name"><h4><b>Course Name</b></h4></label><br>
+        <input type="text" [(ngModel)]="course.name"
+               class="form-control"
+               id="name"
+               name="name"
+               placeholder="Enter Course Name"
+               required #name="ngModel">
+      </div>
+      <div *ngIf="name.invalid && (name.dirty || name.touched)" class="alert alert-danger">
+        <div *ngIf="name.errors?.['required']">course name is required.</div>
+      </div>
+      <div class="form-group">
+        <label for="courseID"><h4><b>Course ID</b></h4></label><br>
+        <input type="text" [(ngModel)]="course.courseID"
+               class="form-control"
+               id="courseID"
+               name="courseID"
+               placeholder="Enter Course ID"
+               required #courseID="ngModel">
+      </div>
+      <div *ngIf="courseID.invalid && (courseID.dirty || courseID.touched)" class="alert alert-danger">
+        <div *ngIf="courseID.errors?.['required']">course id is required.</div>
+      </div>
+      <div class="form-group">
+        <label for="capacity"><h4><b>Capacity</b></h4></label><br>
+        <input type="text" [(ngModel)]="course.capacity"
+               class="form-control"
+               id="capacity"
+               name="capacity"
+               placeholder="Enter your capacity"
+               required #capacity="ngModel">
+      </div>
+      <div *ngIf="capacity.invalid && (capacity.dirty || capacity.touched)" class="alert alert-danger">
+        <div *ngIf="capacity.errors?.['required']">capacity is required.</div>
+      </div>
+      <div class="form-group">
+        <label for="credit"><h4><b>Credit</b></h4></label><br>
+        <input type="text" [(ngModel)]="course.credit"
+               class="form-control"
+               id="credit"
+               name="credit"
+               placeholder="Enter course credit"
+               required #credit="ngModel">
+      </div>
+      <div *ngIf="credit.invalid && (credit.dirty || credit.touched)" class="alert alert-danger">
+        <div *ngIf="credit.errors?.['required']">credit is required.</div>
+      </div>
+      <div class="form-group">
+        <label for="assignedInstructor"><h4><b>Instructor</b></h4></label><br>
+        <select id="assignedInstructor"
+                name="assignedInstructor"
+                [(ngModel)]="course.assignedInstructor"
+                required #assignedInstructor="ngModel">
+          <option *ngFor="let instructor of instructors" [value]="instructor.instructor_oid">{{instructor.lastName+" "+instructor.firstName}}</option>
+        </select>
+      </div>
+      <div *ngIf="assignedInstructor.invalid && (assignedInstructor.dirty || assignedInstructor.touched)" class="alert alert-danger">
+        <div *ngIf="assignedInstructor.errors?.['required']">need to assign instructor.</div>
+      </div>
+      <button type="submit" [disabled]="!userForm.form.valid"
+              class="btn btn-info"
+              style="margin-bottom: 10px;">Submit
+      </button>
+    </form>
+  </div>
+</div>

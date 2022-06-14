@@ -1,0 +1,79 @@
+<div class="container text-center table-bordered table-sm" style="width:300px;">
+  <div class="panel-title"><h2>Add Instructor Form</h2></div>
+  <div>
+    <form (ngSubmit)="onSubmit()" #userForm="ngForm">
+      <div class="form-group">
+        <label for="lastName"><h4><b>Last name</b></h4></label><br>
+        <input type="text" [(ngModel)]="instructor.lastName"
+               class="form-control"
+               id="lastName"
+               name="lastName"
+               placeholder="Enter your last name"
+               required #lastName="ngModel">
+      </div>
+      <div *ngIf="lastName.invalid && (lastName.dirty || lastName.touched)" class="alert alert-danger">
+        <div *ngIf="lastName.errors?.['required']">last name is required.</div>
+      </div>
+      <div class="form-group">
+        <label for="firstName"><h4><b>First name</b></h4></label><br>
+        <input type="text" [(ngModel)]="instructor.firstName"
+               class="form-control"
+               id="firstName"
+               name="firstName"
+               placeholder="Enter your first name"
+               required #firstName="ngModel">
+      </div>
+      <div *ngIf="firstName.invalid && (firstName.dirty || firstName.touched)" class="alert alert-danger">
+        <div *ngIf="firstName.errors?.['required']">first name is required.</div>
+      </div>
+      <div class="form-group">
+        <label for="gender"><h4><b>Gender</b></h4></label><br>
+        <input type="text" [(ngModel)]="instructor.gender"
+               class="form-control"
+               id="gender"
+               name="gender"
+               placeholder="Enter your gender"
+               required #gender="ngModel">
+      </div>
+      <div class="form-group">
+        <label for="phoneNumber"><h4><b>phone#</b></h4></label><br>
+        <input type="text" [(ngModel)]="instructor.phoneNumber"
+               class="form-control"
+               id="phoneNumber"
+               name="phoneNumber"
+               placeholder="Enter your phone number"
+               required #phoneNumber="ngModel">
+      </div>
+      <div class="form-group">
+        <label for="employeeID"><h4><b>employee#</b></h4></label><br>
+        <input type="text" [(ngModel)]="instructor.employeeID"
+               class="form-control"
+               id="employeeID"
+               name="employeeID"
+               placeholder="Enter your employeeID"
+               required #employeeID="ngModel">
+      </div>
+      <div *ngIf="employeeID.invalid && (employeeID.dirty || employeeID.touched)" class="alert alert-danger">
+        <div *ngIf="employeeID.errors?.['required']">employee ID is required.</div>
+      </div>
+      <div class="form-group">
+        <label for="title"><h4><b>Title</b></h4></label><br>
+        <select id="title"
+                name="title"
+                [(ngModel)]="instructor.title"
+                required #title="ngModel">
+          <option value="Assistant_professor">Assistant_professor</option>
+          <option value="Associate_professor">Associate_professor</option>
+          <option value="professor">professor</option>
+        </select>
+      </div>
+      <div *ngIf="title.invalid && (title.dirty || title.touched)" class="alert alert-danger">
+        <div *ngIf="title.errors?.['required']">Title is required.</div>
+      </div>
+      <button type="submit" [disabled]="!userForm.form.valid"
+              class="btn btn-info"
+              style="margin-bottom: 10px;">Submit
+      </button>
+    </form>
+  </div>
+</div>

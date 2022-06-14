@@ -1,0 +1,21 @@
+<div class="table table-bordered table-striped">
+  <thead class="thread-light">
+  <tr>
+    <th scope="col">Course Name</th>
+    <th scope="col">Course State</th>
+    <th scope="col">Course Grade</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let student of students;">
+    <td>{{student.course.name}}</td>
+    <td>{{student.state}}</td>
+    <td>{{student.score}}</td>
+  </tr>
+  </tbody>
+  <div>Total Credit </div>
+  <div>{{credit}}</div>
+  <div>CGPA </div>
+  <div>{{cGPA}}</div>
+</div>
+<button type="button" class="btn btn-danger mb-4" (click)="stopAction()">Close</button>

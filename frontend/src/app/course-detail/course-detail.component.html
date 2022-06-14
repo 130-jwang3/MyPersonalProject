@@ -1,0 +1,28 @@
+<div style="width:550px;margin:auto;" class="border rounded">
+  <div style="width: 500px; margin: auto;">
+    <div *ngIf="currentCourse" class="edit-form">
+      <h2>Course</h2>
+      <form>
+        <div class="form-group">
+          <label for="assignedInstructor"><h4><b>Assigned Instructor</b></h4></label><br>
+          <select id="assignedInstructor"
+                  name="assignedInstructor"
+                  [(ngModel)]="currentCourse.assignedInstructor"
+                  required #assignedInstructor="ngModel">
+            <option *ngFor="let instructor of instructors" [value]="instructor.instructor_oid">{{instructor.lastName+" "+instructor.firstName}}</option>
+          </select>
+        </div>
+        <div *ngIf="assignedInstructor.invalid && (assignedInstructor.dirty || assignedInstructor.touched)" class="alert alert-danger">
+          <div *ngIf="assignedInstructor.errors?.['required']">need to assign instructor.</div>
+        </div>
+      </form>
+
+      <button type="button" class="btn btn-primary mb-4 mr-1" id="button1" (click)="updateCourse()">
+        Update
+      </button>
+      <button type="button" class="btn btn-danger mb-4" (click)="stopAction()">Close</button>
+
+    </div>
+
+  </div>
+</div>

@@ -1,0 +1,61 @@
+<div style="width:550px;margin:auto;" class="border rounded">
+  <div style="width: 500px; margin: auto;">
+    <div *ngIf="currentInstructor" class="edit-form">
+      <h2>Instructor</h2>
+      <form>
+        <div class="form-group">
+          <label>Last Name</label>
+          <input
+            type="text"
+            class="form-control"
+            id="lastName"
+            [(ngModel)]="currentInstructor.lastName"
+            name="lastName"
+            placeholder="{{currentInstructor.lastName}}"
+          />
+        </div>
+        <div class="form-group">
+          <label>First Name</label>
+          <input
+            type="text"
+            class="form-control"
+            id="firstName"
+            [(ngModel)]="currentInstructor.firstName"
+            name="firstName"
+            placeholder="{{currentInstructor.firstName}}"
+          />
+        </div>
+        <div class="form-group">
+          <label>Phone</label>
+          <input
+            type="text"
+            class="form-control"
+            id="phoneNumber"
+            [(ngModel)]="currentInstructor.phoneNumber"
+            name="phoneNumber"
+            placeholder="{{currentInstructor.phoneNumber}}"
+          />
+        </div>
+        <div class="form-group">
+          <label for="title"><h4><b>Title</b></h4></label><br>
+          <select id="title"
+                  name="title"
+                  [(ngModel)]="currentInstructor.title"
+                  required #title="ngModel">
+            <option value="" disabled selected hidden>{{currentInstructor.title}}</option>
+            <option value="Assistant_professor">Assistant_professor</option>
+            <option value="Associate_professor">Associate_professor</option>
+            <option value="professor">professor</option>
+          </select>
+        </div>
+      </form>
+
+      <button type="button" class="btn btn-primary mb-4 mr-1" id="button1" (click)="updateInstructor()">
+        Update
+      </button>
+      <button type="button" class="btn btn-danger mb-4" (click)="stopAction()">Close</button>
+
+    </div>
+
+  </div>
+</div>

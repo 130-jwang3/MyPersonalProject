@@ -1,0 +1,28 @@
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+### IntelliJ IDEA ###
+MyPersonalProject/.idea
+*.iws
+*.iml
+*.ipr
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+build/
+/.idea/
+/backend/target/
+/frontend/dist/
+/frontend/node/
+/frontend/target/
+### VS Code ###
+.vscode/

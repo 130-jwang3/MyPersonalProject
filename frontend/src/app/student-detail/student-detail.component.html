@@ -1,0 +1,75 @@
+<div style="width:550px;margin:auto;" class="border rounded">
+  <div style="width: 500px; margin: auto;">
+    <div *ngIf="currentStudent" class="edit-form">
+      <h2>Student</h2>
+      <form>
+        <div class="form-group">
+          <label>Last Name</label>
+          <input
+            type="text"
+            class="form-control"
+            id="lastName"
+            [(ngModel)]="currentStudent.lastName"
+            name="lastName"
+            placeholder="{{currentStudent.lastName}}"
+          />
+        </div>
+        <div class="form-group">
+          <label>First Name</label>
+          <input
+            type="text"
+            class="form-control"
+            id="firstName"
+            [(ngModel)]="currentStudent.firstName"
+            name="firstName"
+            placeholder="{{currentStudent.firstName}}"
+          />
+        </div>
+        <div class="form-group">
+          <label>Phone</label>
+          <input
+            type="text"
+            class="form-control"
+            id="phoneNumber"
+            [(ngModel)]="currentStudent.phoneNumber"
+            name="phoneNumber"
+            placeholder="{{currentStudent.phoneNumber}}"
+          />
+        </div>
+        <div class="form-group">
+          <label for="major"><h4><b>Major</b></h4></label><br>
+          <select id="major"
+                  name="major"
+                  [(ngModel)]="currentStudent.major"
+                  required #major="ngModel">
+            <option value="" disabled selected hidden>{{currentStudent.major}}</option>
+            <option value="COMPUTER_SCIENCE">computer science</option>
+            <option value="ENGINEER">engineer</option>
+            <option value="MATH">math</option>
+            <option value="PHYSICS">physics</option>
+            <option value="APPLIED_SCIENCE">applied science</option>
+            <option value="ARTS">arts</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="type"><h4><b>Type</b></h4></label><br>
+          <select id="type"
+                  name="type"
+                  [(ngModel)]="currentStudent.type"
+                  required #type="ngModel">
+            <option value="" disabled selected hidden>{{currentStudent.type}}</option>
+            <option value="Undergraduate">undergraduate</option>
+            <option value="Graduate">graduate</option>
+          </select>
+        </div>
+      </form>
+
+      <button type="button" class="btn btn-primary mb-4 mr-1" id="button1" (click)="updateStudent()">
+        Update
+      </button>
+      <button type="button" class="btn btn-danger mb-4" (click)="stopAction()">Close</button>
+
+    </div>
+
+  </div>
+</div>

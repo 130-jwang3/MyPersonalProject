@@ -1,0 +1,57 @@
+<div class="list row">
+  <div class="col-md-8 container">
+    <div class="input-group mb-4">
+      <input type="text" class="form-control" placeholder="Search by name" [(ngModel)]="searchName"/>
+      <button class="btn btn-secondary container-fluid" type="button" (click)="searchByName(searchName)">
+        Search
+      </button>
+    </div>
+  </div>
+  <div class="panel-body container table-bordered table-striped ">
+    <h2>Student List</h2>
+    <table id="studentTable" class="table table-hover table-sm table-bordered">
+      <thead class="thread-light">
+      <tr>
+        <th scope="col">Student#</th>
+        <th scope="col">Last Name</th>
+        <th scope="col">First Name</th>
+        <th scope="col">Gender</th>
+        <th scope="col">Type</th>
+        <th scope="col">Phone#</th>
+        <th scope="col" >Major</th>
+        <th scope="col" style="min-width: 150px;">Action</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let student of students;">
+        <td>{{student.studentNumber}}</td>
+        <td>{{student.lastName}}</td>
+        <td>{{student.firstName}}</td>
+        <td>{{student.gender}}</td>
+        <td>{{student.type}}</td>
+        <td>{{student.phoneNumber}}</td>
+        <td>{{student.major}}</td>
+        <td>
+          <button type="button" class="btn btn-warning mr-1" routerLink="/students/{{student.studentNumber}}">Edit</button>
+          <button type="button" class="btn btn-danger mr-1" (click)="deleteStudent(student.studentNumber)">Delete</button>
+          <button type="button" class="btn btn-primary mr-1" routerLink="/studentdetail/{{student.studentOID}}">Detail</button>
+          <button type="button" class="btn btn-danger mr-1" (click)="leaveSchool(student.studentOID)">Leave</button>
+          <button type="button" class="btn btn-primary mr-1" *ngIf="!addParameter" (click)="toggleForm()">Enroll</button>
+          <div class="Parameters" *ngIf="addParameter">
+            <div class="form-group">
+              <label for="course"><h4><b>Instructor</b></h4></label><br>
+              <select id="course"
+                      name="course">
+                <option *ngFor="let course of courses" [value]="course.name">{{course.name}}</option>
+              </select>
+            </div>
+            <button type="submit" (click)="enrollStudent(student.studentOID)">Enroll</button>
+            <button (click)="toggleForm()">Cancel</button>
+          </div>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+

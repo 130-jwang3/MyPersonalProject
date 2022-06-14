@@ -1,0 +1,33 @@
+<div class="table table-bordered table-striped">
+  <thead class="thread-light">
+  <h3>Enrolled Student</h3>
+  <tr>
+    <th scope="col">Student Name</th>
+    <th scope="col">Student Grade</th>
+    <th scope="col">Action</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let enroll of enrolled;">
+    <td>{{enroll.student.firstName + " " + enroll.student.lastName}}</td>
+    <td>{{enroll.score}}</td>
+    <td>
+      <button type="button" class="btn btn-danger mr-1" (click)="dropCourse(enroll.student.studentNumber)">Drop Course</button>
+    </td>
+  </tr>
+  </tbody>
+  <thead class="thread-light">
+  <h3>Finished Student</h3>
+  <tr>
+    <th scope="col">Student Name</th>
+    <th scope="col">Student Grade</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let finish of finished;">
+    <td>{{finish.student.firstName + " " + finish.student.lastName}}</td>
+    <td>{{finish.score}}</td>
+  </tr>
+  </tbody>
+</div>
+<button type="button" class="btn btn-danger mb-4" (click)="stopAction()">Close</button>
