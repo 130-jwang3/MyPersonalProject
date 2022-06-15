@@ -1,3 +1,6 @@
+HELP.md
+/target/
+!.mvn/wrapper/maven-wrapper.jar
 
 ### STS ###
 .apt_generated
@@ -7,22 +10,20 @@
 .settings
 .springBeans
 .sts4-cache
+
 ### IntelliJ IDEA ###
-MyPersonalProject/.idea
+.idea
 *.iws
 *.iml
 *.ipr
+
 ### NetBeans ###
 /nbproject/private/
 /nbbuild/
 /dist/
 /nbdist/
 /.nb-gradle/
-build/
-/.idea/
-/backend/target/
-/frontend/dist/
-/frontend/node/
-/frontend/target/
+/build/
+
 ### VS Code ###
 .vscode/
